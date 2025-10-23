@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coming Soon - Get Early Access</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 60px 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .emoji {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        h1 {
+            font-size: 42px;
+            font-weight: 800;
+            color: #1a202c;
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            font-size: 20px;
+            color: #4a5568;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .form-container {
+            margin-top: 40px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        input[type="email"] {
+            flex: 1;
+            min-width: 250px;
+            padding: 18px 24px;
+            font-size: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input[type="email"]:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        button {
+            padding: 18px 36px;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message {
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+
+        .features {
+            margin-top: 50px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            text-align: center;
+        }
+
+        .feature {
+            padding: 20px;
+        }
+
+        .feature-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .feature-text {
+            font-size: 14px;
+            color: #4a5568;
+            font-weight: 500;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 40px 24px;
+            }
+
+            h1 {
+                font-size: 32px;
+            }
+
+            .subtitle {
+                font-size: 18px;
+            }
+
+            .input-group {
+                flex-direction: column;
+            }
+
+            input[type="email"], button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="emoji">🚀</div>
+        <h1>Something Amazing Is Coming</h1>
+        <p class="subtitle">Be the first to know when we launch. Join our exclusive waitlist and get early access!</p>
+
+        <div class="form-container">
+            <form id="emailForm">
+                <div class="input-group">
+                    <input 
+                        type="email" 
+                        id="emailInput" 
+                        placeholder="Enter your email address" 
+                        required
+                    >
+                    <button type="submit" id="submitBtn">Notify Me</button>
+                </div>
+            </form>
+            <div id="message" class="message"></div>
+        </div>
+
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <div class="feature-text">Early Access</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🎁</div>
+                <div class="feature-text">Exclusive Benefits</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🔔</div>
+                <div class="feature-text">Launch Updates</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // IMPORTANT: Replace this URL with your Google Apps Script Web App URL
+        const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+
+        const form = document.getElementById('emailForm');
+        const emailInput = document.getElementById('emailInput');
+        const submitBtn = document.getElementById('submitBtn');
+        const message = document.getElementById('message');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = emailInput.value.trim();
+            
+            if (!email) {
+                showMessage('Please enter a valid email address.', 'error');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email: email })
+                });
+
+                // With no-cors mode, we can't read the response
+                // So we assume success if no error was thrown
+                showMessage('🎉 Success! You\'re on the list. We\'ll notify you at launch!', 'success');
+                emailInput.value = '';
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('Oops! Something went wrong. Please try again.', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Notify Me';
+            }
+        });
+
+        function showMessage(text, type) {
+            message.textContent = text;
+            message.className = `message ${type}`;
+            
+            if (type === 'success') {
+                setTimeout(() => {
+                    message.style.display = 'none';
+                }, 5000);
+            }
+        }
+    </script>
+</body>
+</html>
