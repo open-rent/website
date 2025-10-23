@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coming Soon - Get Early Access</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <style>
         * {
             margin: 0;
@@ -126,6 +127,12 @@
             transform: none;
         }
 
+        .recaptcha-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
         .message {
             margin-top: 20px;
             padding: 16px;
@@ -212,6 +219,9 @@
                     >
                     <button type="submit" id="submitBtn">Notify Me</button>
                 </div>
+                <div class="recaptcha-container">
+                    <div class="g-recaptcha" data-sitekey="6LcB4_QrAAAAAMsO6eE2LrNUPIBd_21_Mxswvpru"></div>
+                </div>
             </form>
             <div id="message" class="message"></div>
         </div>
@@ -233,8 +243,9 @@
     </div>
 
     <script>
-        // IMPORTANT: Replace this URL with your Google Apps Script Web App URL
+        // IMPORTANT: Replace these with your actual keys
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbygsGGlVF9MLnnxlF3ZhlW7YuKPKD39h8I0VvLhsyBvRyHDUSQU8fdYrLAlTk_nhMdR/exec';
+        // Get your site key from https://www.google.com/recaptcha/admin
 
         const form = document.getElementById('emailForm');
         const emailInput = document.getElementById('emailInput');
@@ -251,26 +262,42 @@
                 return;
             }
 
+            // Get reCAPTCHA response
+            const recaptchaResponse = grecaptcha.getResponse();
+            if (!recaptchaResponse) {
+                showMessage('Please complete the reCAPTCHA verification.', 'error');
+                return;
+            }
+
             submitBtn.disabled = true;
             submitBtn.textContent = 'Submitting...';
 
             try {
                 const response = await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
-                    mode: 'no-cors',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ email: email })
+                    body: JSON.stringify({ 
+                        email: email,
+                        recaptchaToken: recaptchaResponse
+                    })
                 });
 
-                // With no-cors mode, we can't read the response
-                // So we assume success if no error was thrown
-                showMessage('🎉 Success! You\'re on the list. We\'ll notify you at launch!', 'success');
-                emailInput.value = '';
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    showMessage('🎉 Success! You\'re on the list. We\'ll notify you at launch!', 'success');
+                    emailInput.value = '';
+                    grecaptcha.reset();
+                } else {
+                    showMessage(result.message || 'Verification failed. Please try again.', 'error');
+                    grecaptcha.reset();
+                }
             } catch (error) {
                 console.error('Error:', error);
                 showMessage('Oops! Something went wrong. Please try again.', 'error');
+                grecaptcha.reset();
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Notify Me';
