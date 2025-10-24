@@ -272,36 +272,46 @@
             submitBtn.disabled = true;
             submitBtn.textContent = 'Submitting...';
 
-            try {
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ 
-                        email: email,
-                        recaptchaToken: recaptchaResponse
-                    })
-                });
+            // Create a hidden iframe to submit without page reload
+            const iframe = document.createElement('iframe');
+            iframe.name = 'hidden_iframe';
+            iframe.style.display = 'none';
+            document.body.appendChild(iframe);
 
-                const result = await response.json();
-                
-                if (result.status === 'success') {
-                    showMessage('🎉 Success! You\'re on the list. We\'ll notify you at launch!', 'success');
-                    emailInput.value = '';
-                    grecaptcha.reset();
-                } else {
-                    showMessage(result.message || 'Verification failed. Please try again.', 'error');
-                    grecaptcha.reset();
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                showMessage('Oops! Something went wrong. Please try again.', 'error');
+            // Create a temporary form
+            const tempForm = document.createElement('form');
+            tempForm.action = GOOGLE_SCRIPT_URL;
+            tempForm.method = 'POST';
+            tempForm.target = 'hidden_iframe';
+
+            // Add email field
+            const emailField = document.createElement('input');
+            emailField.type = 'hidden';
+            emailField.name = 'email';
+            emailField.value = email;
+            tempForm.appendChild(emailField);
+
+            // Add recaptcha token field
+            const tokenField = document.createElement('input');
+            tokenField.type = 'hidden';
+            tokenField.name = 'recaptchaToken';
+            tokenField.value = recaptchaResponse;
+            tempForm.appendChild(tokenField);
+
+            // Submit form
+            document.body.appendChild(tempForm);
+            tempForm.submit();
+
+            // Clean up and show success
+            setTimeout(() => {
+                showMessage('🎉 Success! You\'re on the list. We\'ll notify you at launch!', 'success');
+                emailInput.value = '';
                 grecaptcha.reset();
-            } finally {
+                document.body.removeChild(tempForm);
+                document.body.removeChild(iframe);
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Notify Me';
-            }
+            }, 1000);
         });
 
         function showMessage(text, type) {
