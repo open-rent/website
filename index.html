@@ -460,6 +460,12 @@
             console.log("🔍 DEBUG: Response received:", response);
             console.log("✅ Request sent successfully (no-cors mode)");
 
+            // Note: With no-cors mode, we can't read the response
+            // But if no error was thrown, the submission likely worked
+
+            // Small delay to allow the request to complete
+            await new Promise((resolve) => setTimeout(resolve, 500));
+
             if (!response.ok) throw new Error("Submission failed");
             const result = await response.json();
 
