@@ -427,7 +427,10 @@
             console.log("🔍 DEBUG: Google Script URL:", GOOGLE_SCRIPT_URL);
 
             // Check if URL is configured
-            if (GOOGLE_SCRIPT_URL === "YOUR_GOOGLE_APPS_SCRIPT_URL") {
+            if (
+              GOOGLE_SCRIPT_URL ===
+              "https://script.google.com/macros/s/AKfycbwTDuZRPNkKuTENd_7FHAstsQ353SMGJmLpcIG7MYeEvneXgCMmCYMWtAqSZOi9GzQ/exec"
+            ) {
               throw new Error(
                 "⚠️ Google Apps Script URL not configured! Please replace YOUR_GOOGLE_APPS_SCRIPT_URL with your actual script URL."
               );
@@ -465,9 +468,6 @@
 
             // Small delay to allow the request to complete
             await new Promise((resolve) => setTimeout(resolve, 500));
-
-            if (!response.ok) throw new Error("Submission failed");
-            const result = await response.json();
 
             // Success State
             button.innerHTML = "Joined!";
