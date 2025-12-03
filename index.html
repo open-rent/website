@@ -436,8 +436,6 @@
             if (!response.ok) throw new Error("Submission failed");
             const result = await response.json();
 
-            await new Promise((resolve) => setTimeout(resolve, 1500)); // Simulating 1.5s server delay
-
             // Success State
             button.innerHTML = "Joined!";
             button.classList.remove(
