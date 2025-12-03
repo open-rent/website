@@ -1,292 +1,488 @@
-<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coming Soon - Get Early Access</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Roost - Rental Reviews</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 600px;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 60px 40px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            text-align: center;
-            animation: fadeIn 0.8s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .emoji {
-            font-size: 80px;
-            margin-bottom: 20px;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
-
-        h1 {
-            font-size: 42px;
-            font-weight: 800;
-            color: #1a202c;
-            margin-bottom: 16px;
-            line-height: 1.2;
-        }
-
-        .subtitle {
-            font-size: 20px;
-            color: #4a5568;
-            margin-bottom: 40px;
-            line-height: 1.6;
-        }
-
-        .form-container {
-            margin-top: 40px;
-        }
-
-        .input-group {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        input[type="email"] {
-            flex: 1;
-            min-width: 250px;
-            padding: 18px 24px;
-            font-size: 16px;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-
-        input[type="email"]:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        button {
-            padding: 18px 36px;
-            font-size: 16px;
-            font-weight: 600;
-            color: white;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-        }
-
-        button:active {
-            transform: translateY(0);
-        }
-
-        button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .message {
-            margin-top: 20px;
-            padding: 16px;
-            border-radius: 12px;
-            font-size: 15px;
-            font-weight: 500;
-            display: none;
-        }
-
-        .message.success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-            display: block;
-        }
-
-        .message.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-            display: block;
-        }
-
-        .features {
-            margin-top: 50px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 20px;
-            text-align: center;
-        }
-
-        .feature {
-            padding: 20px;
-        }
-
-        .feature-icon {
-            font-size: 32px;
-            margin-bottom: 8px;
-        }
-
-        .feature-text {
-            font-size: 14px;
-            color: #4a5568;
-            font-weight: 500;
-        }
-
-        @media (max-width: 600px) {
-            .container {
-                padding: 40px 24px;
-            }
-
-            h1 {
-                font-size: 32px;
-            }
-
-            .subtitle {
-                font-size: 18px;
-            }
-
-            .input-group {
-                flex-direction: column;
-            }
-
-            input[type="email"], button {
-                width: 100%;
-            }
-        }
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+      }
+      /* Custom scrollbar hide */
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      /* Custom range slider styling */
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        height: 24px;
+        width: 24px;
+        border-radius: 50%;
+        background: #f97316;
+        cursor: grab;
+        margin-top: -10px;
+        box-shadow: 0 4px 6px -1px rgba(249, 115, 22, 0.4);
+        border: 2px solid #fff;
+        transition: transform 0.1s;
+      }
+      input[type="range"]::-webkit-slider-thumb:active {
+        transform: scale(1.1);
+        cursor: grabbing;
+      }
+      input[type="range"]::-moz-range-thumb {
+        height: 24px;
+        width: 24px;
+        border-radius: 50%;
+        background: #f97316;
+        cursor: grab;
+        border: 2px solid #fff;
+        box-shadow: 0 4px 6px -1px rgba(249, 115, 22, 0.4);
+      }
+      input[type="range"]::-webkit-slider-runnable-track {
+        width: 100%;
+        height: 6px;
+        cursor: pointer;
+        background: #fed7aa;
+        border-radius: 999px;
+      }
+      .tilt-card {
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .tilt-card:hover {
+        transform: scale(1.05) rotate(0deg) !important;
+        z-index: 50;
+      }
     </style>
-</head>
-<body>
-    <div class="container">
-        <div class="emoji">🚀</div>
-        <h1>Something Amazing Is Coming</h1>
-        <p class="subtitle">Be the first to know when we launch. Join our exclusive waitlist and get early access!</p>
+  </head>
+  <body
+    class="bg-[#FFFDF7] text-slate-800 antialiased selection:bg-orange-200 selection:text-orange-900 overflow-x-hidden"
+  >
+    <!-- Navbar -->
+    <nav
+      class="fixed top-0 w-full z-50 bg-[#FFFDF7]/90 backdrop-blur-xl border-b border-orange-100/50"
+    >
+      <div class="max-w-5xl mx-auto px-4 sm:px-6">
+        <div class="flex justify-between items-center h-14">
+          <!-- Logo -->
+          <div
+            class="flex-shrink-0 flex items-center gap-2 cursor-pointer group"
+          >
+            <div
+              class="w-8 h-8 bg-orange-500 rounded-xl flex items-center justify-center text-white group-hover:rotate-12 transition-transform duration-300"
+            >
+              <i data-lucide="bird" class="w-5 h-5"></i>
+            </div>
+            <span class="text-lg font-bold tracking-tighter text-slate-900"
+              >roost.</span
+            >
+          </div>
 
-        <div class="form-container">
-            <form id="emailForm">
-                <div class="input-group">
-                    <input 
-                        type="email" 
-                        id="emailInput" 
-                        placeholder="Enter your email address" 
-                        required
-                    >
-                    <button type="submit" id="submitBtn">Notify Me</button>
-                </div>
+          <!-- Desktop Nav -->
+          <div class="hidden md:flex items-center space-x-6">
+            <a
+              href="#"
+              class="text-xs font-semibold text-slate-500 hover:text-orange-600 transition-colors bg-orange-50/50 px-3 py-1.5 rounded-full hover:bg-orange-100"
+              >How it works</a
+            >
+            <a
+              href="#"
+              class="text-xs font-semibold text-slate-500 hover:text-orange-600 transition-colors bg-orange-50/50 px-3 py-1.5 rounded-full hover:bg-orange-100"
+              >Safety</a
+            >
+          </div>
+
+          <!-- CTA -->
+          <div class="flex items-center gap-3">
+            <a
+              href="#"
+              class="hidden md:block text-xs font-bold text-slate-900 hover:text-orange-600"
+              >Sign in</a
+            >
+            <button
+              class="bg-slate-900 hover:bg-orange-500 text-white text-xs font-bold py-2 px-4 rounded-full transition-all shadow-lg shadow-slate-900/10 hover:shadow-orange-500/30 hover:-translate-y-0.5 active:translate-y-0"
+            >
+              Join Waitlist
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div
+      class="relative pt-28 pb-12 lg:pt-40 lg:pb-24 overflow-visible min-h-[600px] flex items-center"
+    >
+      <!-- Fun Blobs -->
+      <div
+        class="absolute top-10 right-0 w-[400px] h-[400px] bg-orange-300/30 rounded-full blur-[80px] pointer-events-none animate-pulse"
+      ></div>
+      <div
+        class="absolute bottom-0 left-0 w-[300px] h-[300px] bg-yellow-300/30 rounded-full blur-[60px] pointer-events-none"
+      ></div>
+
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 relative z-10 w-full">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+          <!-- Left Content -->
+          <div class="text-center lg:text-left z-20">
+            <h1
+              class="text-5xl sm:text-6xl font-bold tracking-tighter text-slate-900 leading-[0.95] mb-6"
+            >
+              Don't rent <br />
+              <span class="relative inline-block">
+                <span
+                  class="absolute inset-0 bg-yellow-200 -rotate-2 rounded-lg blur-sm opacity-50"
+                ></span>
+                <span class="relative text-orange-600">blindly.</span>
+              </span>
+            </h1>
+
+            <p
+              class="text-base text-slate-500 mb-8 max-w-sm mx-auto lg:mx-0 leading-relaxed font-medium"
+            >
+              Real, anonymous reviews from real tenants. Join our exclusive beta
+              to find out about the pests, the noise, and the landlord before
+              you sign.
+            </p>
+
+            <!-- HERO FORM -->
+            <form id="hero-form" class="flex gap-2 max-w-sm mx-auto lg:mx-0">
+              <!-- Honeypot Field -->
+              <input
+                type="text"
+                name="hp_confirm_email"
+                style="display: none !important"
+                tabindex="-1"
+                autocomplete="off"
+              />
+
+              <input
+                type="email"
+                name="email"
+                placeholder="Enter email for beta access..."
+                required=""
+                class="flex-1 appearance-none rounded-2xl border-2 border-slate-100 bg-white px-4 py-3 text-sm text-slate-900 font-medium placeholder-slate-400 focus:border-orange-500 focus:outline-none focus:ring-0 transition-all shadow-sm hover:border-orange-200"
+              />
+              <button
+                type="submit"
+                class="flex items-center justify-center rounded-2xl bg-orange-500 px-6 py-2 text-sm font-bold text-white hover:bg-orange-600 focus:outline-none transition-all shadow-lg shadow-orange-500/20 hover:-translate-y-1 active:translate-y-0 active:scale-95 whitespace-nowrap min-w-[100px]"
+              >
+                Join Beta
+              </button>
             </form>
-            <div id="message" class="message"></div>
-        </div>
+            <p
+              id="hero-message"
+              class="hidden text-xs font-bold mt-3 text-green-600"
+            ></p>
+          </div>
 
-        <div class="features">
-            <div class="feature">
-                <div class="feature-icon">⚡</div>
-                <div class="feature-text">Early Access</div>
+          <!-- Right Visual -->
+          <div
+            class="relative h-[400px] lg:h-[450px] w-full flex items-center justify-center perspective-1000"
+          >
+            <!-- Card 1 -->
+            <div
+              class="tilt-card absolute top-12 lg:right-8 w-64 bg-white p-4 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-100 transform rotate-6 z-10"
+            >
+              <div class="flex items-center gap-2 mb-3">
+                <div
+                  class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600"
+                >
+                  <i data-lucide="user" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h4 class="text-xs font-bold text-slate-900">
+                    Verified Tenant
+                  </h4>
+                  <div
+                    class="flex text-orange-400 scale-75 origin-left -ml-0.5"
+                  >
+                    <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+                    <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+                    <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+                    <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+                    <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+                  </div>
+                </div>
+              </div>
+              <p
+                class="text-xs text-slate-600 font-medium leading-relaxed mb-2"
+              >
+                "Super sunny! ☀️ Landlord actually fixes things."
+              </p>
+              <span
+                class="inline-block px-2 py-1 bg-green-50 text-green-700 rounded-lg text-[10px] font-bold"
+                >Recommended</span
+              >
             </div>
-            <div class="feature">
-                <div class="feature-icon">🎁</div>
-                <div class="feature-text">Exclusive Benefits</div>
+
+            <!-- Card 2 -->
+            <div
+              class="tilt-card absolute top-36 lg:right-28 w-64 bg-white p-4 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-100 transform -rotate-3 z-20"
+            >
+              <div class="flex items-center gap-2 mb-3">
+                <div
+                  class="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center text-red-600"
+                >
+                  <i data-lucide="ghost" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h4 class="text-xs font-bold text-slate-900">Anonymous</h4>
+                  <div class="flex text-slate-200 scale-75 origin-left -ml-0.5">
+                    <i
+                      data-lucide="star"
+                      class="w-3 h-3 text-red-400 fill-current"
+                    ></i>
+                    <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+                    <i data-lucide="star" class="w-3 h-3 fill-current"></i>
+                  </div>
+                </div>
+              </div>
+              <p
+                class="text-xs text-slate-600 font-medium leading-relaxed mb-2"
+              >
+                "Walls are paper thin 📢. Kept my deposit."
+              </p>
+              <span
+                class="inline-block px-2 py-1 bg-red-50 text-red-700 rounded-lg text-[10px] font-bold"
+                >Avoid</span
+              >
             </div>
-            <div class="feature">
-                <div class="feature-icon">🔔</div>
-                <div class="feature-text">Launch Updates</div>
-            </div>
+
+            <!-- Decorative Elements -->
+            <div
+              class="absolute top-20 right-4 w-12 h-12 bg-yellow-400 rounded-full blur-xl opacity-50 animate-bounce"
+            ></div>
+          </div>
         </div>
+      </div>
     </div>
 
+    <!-- Feature Bento Row -->
+    <section class="py-12 bg-white border-t border-slate-100">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6">
+        <div class="text-center max-w-xl mx-auto mb-10">
+          <h2 class="text-2xl font-bold tracking-tight text-slate-900 mb-2">
+            Everything you need to know.
+          </h2>
+          <p class="text-sm text-slate-500 font-medium">
+            We dig up the dirt so you don't have to.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Card 1: Verified -->
+          <div
+            class="group p-6 rounded-[2rem] bg-slate-50 border border-slate-100 hover:border-orange-200 transition-all hover:-translate-y-1"
+          >
+            <div
+              class="w-10 h-10 bg-white rounded-2xl shadow-sm border border-slate-100 flex items-center justify-center mb-4 text-orange-500 group-hover:rotate-12 transition-transform"
+            >
+              <i data-lucide="shield-check" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-base font-bold text-slate-900 mb-1">
+              Verified Tenants
+            </h3>
+            <p class="text-xs text-slate-500 leading-relaxed font-medium">
+              We check leases. No fake 5-star reviews from the landlord's mom.
+            </p>
+          </div>
+
+          <!-- Card 2: Rent History -->
+          <div
+            class="group p-6 rounded-[2rem] bg-orange-50 border border-orange-100 hover:border-orange-200 transition-all hover:-translate-y-1 relative overflow-hidden flex flex-col justify-between"
+          >
+            <div class="relative z-10 mb-4">
+              <h3 class="text-base font-bold text-slate-900 mb-1">
+                Rent History
+              </h3>
+              <p class="text-xs text-slate-600 font-medium">
+                Track price hikes over 5 years. Don't get scammed.
+              </p>
+            </div>
+
+            <div
+              class="h-16 flex items-end gap-1.5 self-start sm:self-center md:self-start"
+            >
+              <div class="w-3 bg-orange-200 rounded-t-sm h-[40%]"></div>
+              <div class="w-3 bg-orange-200 rounded-t-sm h-[50%]"></div>
+              <div class="w-3 bg-orange-300 rounded-t-sm h-[55%]"></div>
+              <div class="w-3 bg-orange-300 rounded-t-sm h-[70%]"></div>
+              <div class="w-3 bg-orange-400 rounded-t-sm h-[65%]"></div>
+              <div
+                class="w-3 bg-orange-500 rounded-t-sm h-[85%] relative group"
+              >
+                <div
+                  class="absolute -top-7 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] font-bold py-0.5 px-1.5 rounded opacity-100 whitespace-nowrap shadow-sm animate-bounce"
+                >
+                  +$400
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Ghost Mode -->
+          <div
+            class="group p-6 rounded-[2rem] bg-white border border-slate-100 shadow-sm hover:shadow-lg transition-all hover:-translate-y-1"
+          >
+            <div
+              class="w-10 h-10 bg-purple-50 rounded-2xl flex items-center justify-center mb-4 text-purple-600 group-hover:scale-110 transition-transform"
+            >
+              <i data-lucide="ghost" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-base font-bold text-slate-900 mb-1">Ghost Mode</h3>
+            <p class="text-xs text-slate-500 font-medium">
+              Post anonymously. Your landlord will never know it was you.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Compact Footer -->
+    <section class="py-12 bg-slate-900 text-center relative overflow-hidden">
+      <div
+        class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5"
+      ></div>
+      <div
+        class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-orange-500 rounded-full blur-[120px] opacity-10 pointer-events-none"
+      ></div>
+
+      <div class="relative z-10 max-w-lg mx-auto px-6">
+        <h2 class="text-3xl font-bold tracking-tighter text-white mb-2">
+          Stop renting blind.
+        </h2>
+        <p class="text-slate-400 text-sm mb-6 font-medium">
+          Join the community helping each other find better homes.
+        </p>
+
+        <!-- FOOTER FORM -->
+        <form
+          id="footer-form"
+          class="flex flex-col sm:flex-row gap-2 max-w-sm mx-auto"
+        >
+          <!-- Honeypot Field -->
+          <input
+            type="text"
+            name="hp_footer"
+            style="display: none !important"
+            tabindex="-1"
+            autocomplete="off"
+          />
+
+          <input
+            type="email"
+            name="email"
+            placeholder="email@address.com"
+            required=""
+            class="flex-1 appearance-none rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-white placeholder-slate-500 focus:border-orange-500 focus:bg-white/10 focus:outline-none focus:ring-0 transition-all backdrop-blur-sm"
+          />
+          <button
+            type="submit"
+            class="flex items-center justify-center gap-2 rounded-2xl bg-orange-500 px-6 py-2 text-sm font-bold text-white hover:bg-orange-400 focus:outline-none transition-all shadow-lg shadow-orange-500/30 hover:-translate-y-0.5 active:translate-y-0 min-w-[100px]"
+          >
+            Join
+          </button>
+        </form>
+        <p
+          id="footer-message"
+          class="hidden text-xs font-bold mt-3 text-orange-400"
+        ></p>
+
+        <div
+          class="mt-10 pt-6 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4 text-[10px] text-slate-500 font-bold uppercase tracking-wider"
+        >
+          <div class="flex items-center gap-2">
+            <i data-lucide="bird" class="w-4 h-4 text-slate-600"></i>
+            <span>© Roost Inc.</span>
+          </div>
+          <div class="flex gap-4">
+            <a href="#" class="hover:text-white transition-colors">Twitter</a>
+            <a href="#" class="hover:text-white transition-colors">Insta</a>
+            <a href="#" class="hover:text-white transition-colors">Legal</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <script>
-        // IMPORTANT: Replace this URL with your Google Apps Script Web App URL
-        const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+      lucide.createIcons();
 
-        const form = document.getElementById('emailForm');
-        const emailInput = document.getElementById('emailInput');
-        const submitBtn = document.getElementById('submitBtn');
-        const message = document.getElementById('message');
+      const GOOGLE_SCRIPT_URL =
+        "https://script.google.com/macros/s/AKfycbwTDuZRPNkKuTENd_7FHAstsQ353SMGJmLpcIG7MYeEvneXgCMmCYMWtAqSZOi9GzQ/exec";
 
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const email = emailInput.value.trim();
-            
-            if (!email) {
-                showMessage('Please enter a valid email address.', 'error');
-                return;
-            }
+      function setupForm(formId, messageId) {
+        const form = document.getElementById(formId);
+        const messageEl = document.getElementById(messageId);
+        const button = form.querySelector('button[type="submit"]');
+        const originalBtnText = button.innerHTML;
 
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Submitting...';
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
 
-            try {
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ email: email })
-                });
+          // Loading State
+          button.disabled = true;
+          button.innerHTML = `
+                    <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Wait...
+                `;
 
-                // With no-cors mode, we can't read the response
-                // So we assume success if no error was thrown
-                showMessage('🎉 Success! You\'re on the list. We\'ll notify you at launch!', 'success');
-                emailInput.value = '';
-            } catch (error) {
-                console.error('Error:', error);
-                showMessage('Oops! Something went wrong. Please try again.', 'error');
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Notify Me';
-            }
+          // Prepare Data
+          const formData = new FormData(form);
+
+          try {
+            // Send to Google Apps Script
+            await fetch(GOOGLE_SCRIPT_URL, {
+              method: "POST",
+              body: formData,
+            });
+
+            // Success State
+            button.innerHTML = "Joined!";
+            button.classList.remove(
+              "bg-orange-500",
+              "hover:bg-orange-600",
+              "hover:bg-orange-400",
+              "text-white"
+            );
+            button.classList.add("bg-green-500", "text-white");
+
+            messageEl.textContent = "You're on the list! We'll be in touch.";
+            messageEl.classList.remove("hidden");
+
+            // Reset form
+            form.reset();
+          } catch (error) {
+            console.error("Error!", error.message);
+            button.disabled = false;
+            button.innerHTML = "Try Again";
+            messageEl.textContent = "Something went wrong. Please try again.";
+            messageEl.classList.remove("hidden");
+            messageEl.classList.add("text-red-500");
+          }
         });
+      }
 
-        function showMessage(text, type) {
-            message.textContent = text;
-            message.className = `message ${type}`;
-            
-            if (type === 'success') {
-                setTimeout(() => {
-                    message.style.display = 'none';
-                }, 5000);
-            }
-        }
+      // Initialize both forms
+      document.addEventListener("DOMContentLoaded", () => {
+        if (document.getElementById("hero-form"))
+          setupForm("hero-form", "hero-message");
+        if (document.getElementById("footer-form"))
+          setupForm("footer-form", "footer-message");
+      });
     </script>
-</body>
+  </body>
 </html>
