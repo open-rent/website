@@ -423,15 +423,42 @@
             const GOOGLE_SCRIPT_URL =
               "https://script.google.com/macros/s/AKfycbwTDuZRPNkKuTENd_7FHAstsQ353SMGJmLpcIG7MYeEvneXgCMmCYMWtAqSZOi9GzQ/exec"; // Replace with your script URL
 
+            console.log("🔍 DEBUG: Form submitted from:", formId);
+            console.log("🔍 DEBUG: Google Script URL:", GOOGLE_SCRIPT_URL);
+
+            // Check if URL is configured
+            if (GOOGLE_SCRIPT_URL === "YOUR_GOOGLE_APPS_SCRIPT_URL") {
+              throw new Error(
+                "⚠️ Google Apps Script URL not configured! Please replace YOUR_GOOGLE_APPS_SCRIPT_URL with your actual script URL."
+              );
+            }
+
+            // Real Google Apps Script submission
             const formData = new FormData(form);
+            const email = formData.get("email");
+
+            console.log("🔍 DEBUG: Email to submit:", email);
+
+            const payload = {
+              email: email,
+              timestamp: new Date().toISOString(),
+              source: formId,
+            };
+
+            console.log("🔍 DEBUG: Payload:", payload);
+            console.log("🔍 DEBUG: Sending request to Google Apps Script...");
+
             const response = await fetch(GOOGLE_SCRIPT_URL, {
               method: "POST",
-              body: JSON.stringify({
-                email: formData.get("email"),
-                timestamp: new Date().toISOString(),
-                source: formId,
-              }),
+              mode: "no-cors", // Important for Google Apps Script
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(payload),
             });
+
+            console.log("🔍 DEBUG: Response received:", response);
+            console.log("✅ Request sent successfully (no-cors mode)");
 
             if (!response.ok) throw new Error("Submission failed");
             const result = await response.json();
