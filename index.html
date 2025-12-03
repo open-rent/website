@@ -63,6 +63,15 @@
         transform: scale(1.05) rotate(0deg) !important;
         z-index: 50;
       }
+      /* Honeypot field - hidden from humans, visible to bots */
+      .honeypot {
+        position: absolute;
+        left: -9999px;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+        pointer-events: none;
+      }
     </style>
   </head>
   <body
@@ -157,6 +166,14 @@
 
             <!-- HERO FORM -->
             <form id="hero-form" class="flex gap-2 max-w-sm mx-auto lg:mx-0">
+              <!-- Honeypot field - bots will fill this, humans won't see it -->
+              <input
+                type="text"
+                name="website"
+                class="honeypot"
+                tabindex="-1"
+                autocomplete="off"
+              />
               <input
                 type="email"
                 name="email"
@@ -362,6 +379,14 @@
           id="footer-form"
           class="flex flex-col sm:flex-row gap-2 max-w-sm mx-auto"
         >
+          <!-- Honeypot field - bots will fill this, humans won't see it -->
+          <input
+            type="text"
+            name="website"
+            class="honeypot"
+            tabindex="-1"
+            autocomplete="off"
+          />
           <input
             type="email"
             name="email"
@@ -412,25 +437,42 @@
           // Loading State
           button.disabled = true;
           button.innerHTML = `
-                    <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Wait...
-                `;
+            <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Wait...
+          `;
 
           try {
+            // Check honeypot field - if filled, it's a bot
+            const honeypot = form.querySelector('input[name="website"]');
+            if (honeypot && honeypot.value !== "") {
+              console.log("🤖 Bot detected! Honeypot field was filled.");
+              // Silently fail - don't let the bot know it was caught
+              await new Promise((resolve) => setTimeout(resolve, 1500));
+              button.innerHTML = "Joined!";
+              button.classList.remove(
+                "bg-orange-500",
+                "hover:bg-orange-600",
+                "hover:bg-orange-400"
+              );
+              button.classList.add("bg-green-500");
+              messageEl.textContent = "You're on the list! We'll be in touch.";
+              messageEl.classList.remove("hidden");
+              form.reset();
+              return; // Exit without actually submitting
+            }
+
             const GOOGLE_SCRIPT_URL =
-              "https://script.google.com/macros/s/AKfycbwTDuZRPNkKuTENd_7FHAstsQ353SMGJmLpcIG7MYeEvneXgCMmCYMWtAqSZOi9GzQ/exec"; // Replace with your script URL
+              "https://script.google.com/macros/s/AKfycbxDfYMPPq5u27itq9z_e3MOz5ElwEIi7hmHLzxBW4tIfvAvN9Bb4BS6cHTORVpimoCY/exec"; // Replace with your script URL
 
             console.log("🔍 DEBUG: Form submitted from:", formId);
             console.log("🔍 DEBUG: Google Script URL:", GOOGLE_SCRIPT_URL);
 
             // Check if URL is configured
             if (GOOGLE_SCRIPT_URL === "YOUR_GOOGLE_APPS_SCRIPT_URL") {
-              throw new Error(
-                "⚠️ Google Apps Script URL not configured! Please replace YOUR_GOOGLE_APPS_SCRIPT_URL with your actual script URL."
-              );
+              throw new Error("⚠️ Google Apps Script URL not configured!");
             }
 
             // Real Google Apps Script submission
@@ -446,24 +488,22 @@
             };
 
             console.log("🔍 DEBUG: Payload:", payload);
-            console.log("🔍 DEBUG: Sending request to Google Apps Script...");
+            console.log("🔍 DEBUG: Sending request...");
 
-            const response = await fetch(GOOGLE_SCRIPT_URL, {
+            await fetch(GOOGLE_SCRIPT_URL, {
               method: "POST",
-              mode: "no-cors", // Important for Google Apps Script
+              mode: "no-cors",
               headers: {
                 "Content-Type": "application/json",
               },
               body: JSON.stringify(payload),
             });
 
-            console.log("🔍 DEBUG: Response received:", response);
-            console.log("✅ Request sent successfully (no-cors mode)");
+            console.log(
+              "✅ Request sent! (no-cors mode - cannot verify response)"
+            );
 
-            // Note: With no-cors mode, we can't read the response
-            // But if no error was thrown, the submission likely worked
-
-            // Small delay to allow the request to complete
+            // Small delay
             await new Promise((resolve) => setTimeout(resolve, 500));
 
             // Success State
@@ -471,10 +511,9 @@
             button.classList.remove(
               "bg-orange-500",
               "hover:bg-orange-600",
-              "hover:bg-orange-400",
-              "text-white"
+              "hover:bg-orange-400"
             );
-            button.classList.add("bg-green-500", "text-white");
+            button.classList.add("bg-green-500");
 
             messageEl.textContent = "You're on the list! We'll be in touch.";
             messageEl.classList.remove("hidden");
@@ -482,11 +521,13 @@
             // Reset form
             form.reset();
           } catch (error) {
-            console.error("Error!", error.message);
+            console.error("❌ ERROR:", error);
+            console.error("❌ ERROR MESSAGE:", error.message);
+
             button.disabled = false;
             button.innerHTML = "Try Again";
-            messageEl.textContent = "Something went wrong. Please try again.";
-            messageEl.classList.remove("hidden");
+            messageEl.textContent = "Error: " + error.message;
+            messageEl.classList.remove("hidden", "text-green-600");
             messageEl.classList.add("text-red-500");
           }
         });
