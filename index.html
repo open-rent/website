@@ -157,15 +157,6 @@
 
             <!-- HERO FORM -->
             <form id="hero-form" class="flex gap-2 max-w-sm mx-auto lg:mx-0">
-              <!-- Honeypot Field -->
-              <input
-                type="text"
-                name="hp_confirm_email"
-                style="display: none !important"
-                tabindex="-1"
-                autocomplete="off"
-              />
-
               <input
                 type="email"
                 name="email"
@@ -371,15 +362,6 @@
           id="footer-form"
           class="flex flex-col sm:flex-row gap-2 max-w-sm mx-auto"
         >
-          <!-- Honeypot Field -->
-          <input
-            type="text"
-            name="hp_footer"
-            style="display: none !important"
-            tabindex="-1"
-            autocomplete="off"
-          />
-
           <input
             type="email"
             name="email"
@@ -418,9 +400,6 @@
     <script>
       lucide.createIcons();
 
-      const GOOGLE_SCRIPT_URL =
-        "https://script.google.com/macros/s/AKfycbwTDuZRPNkKuTENd_7FHAstsQ353SMGJmLpcIG7MYeEvneXgCMmCYMWtAqSZOi9GzQ/exec";
-
       function setupForm(formId, messageId) {
         const form = document.getElementById(formId);
         const messageEl = document.getElementById(messageId);
@@ -440,15 +419,24 @@
                     Wait...
                 `;
 
-          // Prepare Data
-          const formData = new FormData(form);
-
           try {
-            // Send to Google Apps Script
-            await fetch(GOOGLE_SCRIPT_URL, {
+            const GOOGLE_SCRIPT_URL =
+              "https://script.google.com/macros/s/AKfycbwTDuZRPNkKuTENd_7FHAstsQ353SMGJmLpcIG7MYeEvneXgCMmCYMWtAqSZOi9GzQ/exec"; // Replace with your script URL
+
+            const formData = new FormData(form);
+            const response = await fetch(GOOGLE_SCRIPT_URL, {
               method: "POST",
-              body: formData,
+              body: JSON.stringify({
+                email: formData.get("email"),
+                timestamp: new Date().toISOString(),
+                source: formId,
+              }),
             });
+
+            if (!response.ok) throw new Error("Submission failed");
+            const result = await response.json();
+
+            await new Promise((resolve) => setTimeout(resolve, 1500)); // Simulating 1.5s server delay
 
             // Success State
             button.innerHTML = "Joined!";
