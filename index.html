@@ -55,6 +55,7 @@
     />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="/assets/botid-init.js" defer></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
     <link
@@ -613,27 +614,36 @@
               return;
             }
 
-            const GOOGLE_SCRIPT_URL =
-              "https://script.google.com/macros/s/AKfycbxDfYMPPq5u27itq9z_e3MOz5ElwEIi7hmHLzxBW4tIfvAvN9Bb4BS6cHTORVpimoCY/exec";
-
-            console.log("✅ Human verified, submitting to Google Sheets");
-
             const payload = {
               email: email,
               timestamp: new Date().toISOString(),
               source: formId,
             };
 
-            await fetch(GOOGLE_SCRIPT_URL, {
+            const response = await fetch("/api/subscribe", {
               method: "POST",
-              mode: "no-cors",
-              headers: {
-                "Content-Type": "application/json",
-              },
+              headers: { "Content-Type": "application/json" },
               body: JSON.stringify(payload),
             });
 
-            console.log("✅ Request sent successfully");
+            if (!response.ok) {
+              if (response.status === 403) {
+                // BotID blocked — show success silently
+                await new Promise((resolve) => setTimeout(resolve, 800));
+                button.innerHTML = "Joined!";
+                button.classList.remove(
+                  "bg-fuchsia-500",
+                  "hover:bg-fuchsia-600",
+                  "hover:bg-fuchsia-400"
+                );
+                button.classList.add("bg-green-500", "hover:bg-green-600");
+                messageEl.textContent = "You're on the list! We'll be in touch.";
+                messageEl.classList.remove("hidden");
+                form.reset();
+                return;
+              }
+              throw new Error(`Request failed: ${response.status}`);
+            }
 
             // Small delay
             await new Promise((resolve) => setTimeout(resolve, 500));
