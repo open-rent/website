@@ -22,33 +22,38 @@ export async function POST(request: Request) {
     return Response.json({ error: "Invalid email" }, { status: 400 });
   }
 
-  const loopsUrl = process.env.LOOPS_FORM_URL;
-  if (!loopsUrl) {
-    console.error("subscribe: LOOPS_FORM_URL is not set");
+  const apiKey = process.env.LOOPS_API_KEY;
+  if (!apiKey) {
+    console.error("subscribe: LOOPS_API_KEY is not set");
     return Response.json({ error: "Server misconfigured" }, { status: 500 });
   }
 
   try {
-    const formBody = `userGroup=&mailingLists=&email=${encodeURIComponent(email)}`;
+    const upstream = await fetch(
+      "https://app.loops.so/api/v1/contacts/create",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({ email, source: "waitlist" }),
+      }
+    );
 
-    const upstream = await fetch(loopsUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: formBody,
-    });
-
-    if (!upstream.ok) {
-      const data = (await upstream.json().catch(() => ({}))) as {
-        message?: string;
-      };
-      console.error("subscribe: Loops non-2xx", upstream.status, data);
-      return Response.json(
-        { error: data.message ?? "Subscription failed" },
-        { status: upstream.status }
-      );
+    // 409 = contact already exists. Treat as success — same UX either way.
+    if (upstream.ok || upstream.status === 409) {
+      return Response.json({ success: true });
     }
 
-    return Response.json({ success: true });
+    const data = (await upstream.json().catch(() => ({}))) as {
+      message?: string;
+    };
+    console.error("subscribe: Loops non-2xx", upstream.status, data);
+    return Response.json(
+      { error: data.message ?? "Subscription failed" },
+      { status: upstream.status }
+    );
   } catch (err) {
     console.error("subscribe: Loops fetch failed", err);
     return Response.json({ error: "Upstream error" }, { status: 502 });
