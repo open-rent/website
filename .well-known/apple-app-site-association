@@ -1,0 +1,59 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["TEAMID.app.open.rent"],
+        "components": [
+          {
+            "/": "/auth/verify",
+            "?": { "token": "?*" },
+            "comment": "email verification"
+          },
+          {
+            "/": "/auth/reset-password",
+            "?": { "token": "?*" },
+            "comment": "password reset"
+          },
+          {
+            "/": "/auth/magic-link",
+            "?": { "token": "?*" },
+            "comment": "magic-link sign-in"
+          },
+          {
+            "/": "/auth/callback",
+            "comment": "OAuth callback (Apple/Google via Supabase)"
+          },
+          {
+            "/": "/property/*",
+            "comment": "shared property page"
+          },
+          {
+            "/": "/review/*",
+            "comment": "shared review"
+          },
+          {
+            "/": "/search",
+            "?": { "q": "?*", "suburb": "?*" },
+            "comment": "shareable search"
+          },
+          {
+            "/": "/invite/*",
+            "comment": "referral / invite code"
+          },
+          {
+            "/": "/write-review/*",
+            "comment": "compose-review CTA from email"
+          },
+          {
+            "/": "/*",
+            "exclude": true,
+            "comment": "everything else stays in browser"
+          }
+        ]
+      }
+    ]
+  },
+  "webcredentials": {
+    "apps": ["TEAMID.app.open.rent"]
+  }
+}
